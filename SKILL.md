@@ -51,7 +51,7 @@ The default entry point. Run this when the user invokes the skill without argume
 
 Parse the user's input to determine what to interview:
 - If the user provided a topic, plan, or idea inline, use that as the subject.
-- If the user pointed to a file or document, read it first using the Read tool.
+- If the user pointed to a file or document, read it first.
 - If the user gave no subject, ask: "What plan, design, or idea would you like me to stress-test?"
 
 ### Step 2: Run the Interview Phases
@@ -188,7 +188,7 @@ When the user says "review my plan", "review this document", or invokes with the
 ### Step 1: Ingest the Plan
 
 Locate and read the plan:
-- If the user provided a file path, read it using the Read tool.
+- If the user provided a file path, read it.
 - If the user pasted the plan inline, use it directly.
 - If no plan is provided, ask: "Where is the plan I should review? Provide a file path or paste it here."
 

@@ -1,6 +1,6 @@
 # Interviewer Claw
 
-A Claude skill that conducts rigorous, structured interviews to stress-test plans, designs, and ideas. It walks every branch of your decision tree using Socratic inquiry until every ambiguity is resolved, then produces a structured summary of all decisions, open items, and identified risks.
+A system-prompt skill for AI assistants that conducts rigorous, structured interviews to stress-test plans, designs, and ideas. It walks every branch of your decision tree using Socratic inquiry until every ambiguity is resolved, then produces a structured summary of all decisions, open items, and identified risks.
 
 Works for software and non-software projects alike -- architecture designs, business proposals, product specs, construction plans, or any initiative that benefits from disciplined thinking before execution.
 
@@ -119,7 +119,7 @@ The `review` function can also read existing spec-kit artifacts and probe them f
 
 ```
 Interviewer-Claw/
-  SKILL.md              # Main skill instructions (loaded by Claude)
+  SKILL.md              # Main skill instructions (loaded as system prompt)
   references/
     techniques.md       # Questioning techniques (Socratic, Laddering, Inversion, etc.)
     speckit.md          # Spec-kit artifact templates and format reference
@@ -144,6 +144,8 @@ Full technique descriptions are in [`references/techniques.md`](references/techn
 
 ## Installation
 
+The skill is a set of markdown files that can be loaded as system-prompt context by any AI assistant that supports file reading and multi-turn conversation. Adapt the integration method to your platform.
+
 ### Claude Code
 
 Place the `Interviewer-Claw` folder in your Claude Code skills directory, or reference it from your project's `.claude/settings.json`.
@@ -154,6 +156,18 @@ Place the `Interviewer-Claw` folder in your Claude Code skills directory, or ref
 2. Open Claude.ai > Settings > Capabilities > Skills
 3. Upload the zip file
 4. Enable the skill
+
+### OpenAI (Custom GPT or API)
+
+1. Create a Custom GPT or API assistant.
+2. Paste the contents of `SKILL.md` into the system prompt / instructions field.
+3. Upload `references/techniques.md` and `references/speckit.md` as knowledge files (or inline their contents into the system prompt).
+4. Enable file reading / code interpreter if available.
+
+### Other Platforms (Gemini, open-source agents, etc.)
+
+1. Concatenate `SKILL.md`, `references/techniques.md`, and `references/speckit.md` into a single system prompt, or load them as context files if the platform supports it.
+2. Ensure the model has access to file-reading capabilities if you want artifact review (`review` function) or spec generation (`speckit` function).
 
 ## Tips for Best Results
 
