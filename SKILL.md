@@ -86,12 +86,19 @@ When the user states a solution (e.g., "I need a database"), pivot to find the a
 
 Probe the boundaries. Adapt questions to the project type identified in Phase 0.
 
-**For software projects:**
+**For software projects -- infrastructure:**
 - Target platforms and deployment model
 - Data sensitivity, volume, and residency requirements
 - Compliance or regulatory constraints (GDPR, HIPAA, SOC 2)
 - Integration points and dependencies on external systems
 - Performance and latency requirements
+
+**For software projects -- design:**
+- Key entities and data model: "What are the nouns in this system? What are their relationships, state transitions, and validation rules?"
+- Interfaces and contracts: "How do components talk to each other? What are the API surfaces, event formats, or CLI schemas?"
+- User story decomposition: Break Jobs-to-be-Done outcomes from Phase 1 into discrete, testable user stories. For each, define acceptance criteria in Given/When/Then format.
+- Error states and edge cases: "What happens when this goes wrong? What are the boundary conditions? What inputs are invalid?"
+- Test-first thinking: "How will you verify this works? What does 'correct' look like at the code level before any code is written?"
 
 **For non-software projects:**
 - Budget accuracy and financing requirements
@@ -144,7 +151,8 @@ Interviewer Claw -- Structured Interview Skill
 Usage:
   /interviewer-claw                Start a new interview from scratch
   /interviewer-claw [topic]        Interview about a specific topic or idea
-  /interviewer-claw review         Review and refine an existing plan
+  /interviewer-claw review         Review and refine an existing plan or spec-kit artifacts
+  /interviewer-claw speckit        Generate spec-kit artifacts from interview decisions
   /interviewer-claw help           Show this help message
 
 What it does:
@@ -152,10 +160,14 @@ What it does:
   until every ambiguity is resolved. Produces a structured summary
   of all decisions, open items, and identified risks.
 
+  For software projects, can also generate spec-kit-compatible
+  artifacts (spec.md, data-model.md, contracts, tasks.md).
+
 Interview Phases:
   Phase 0: Kick-off         Scope, stakeholders, vision
   Phase 1: Job Mapping      The "what" and "why" (Jobs-to-be-Done)
   Phase 2: Constraints      Boundaries, feasibility, triple constraint
+                            (software: data model, contracts, acceptance criteria)
   Phase 3: Risk             Inversion/pre-mortem, Five Whys, blind-spot check
   Phase 4: Synthesis        Structured summary and validation
 
@@ -164,6 +176,7 @@ Tips:
   - Say "park it" to defer a question and come back later.
   - Say "I don't know yet" -- that is valid, the item gets tracked.
   - If you have an existing plan, use "review" to refine it.
+  - After a software interview, use "speckit" to generate artifacts.
 ```
 
 ---
@@ -179,6 +192,16 @@ Locate and read the plan:
 - If the user pasted the plan inline, use it directly.
 - If no plan is provided, ask: "Where is the plan I should review? Provide a file path or paste it here."
 
+**Spec-kit detection:** If the path contains a spec-kit artifact tree (e.g., `specs/###-feature/spec.md`, `memory/constitution.md`), read ALL related artifacts:
+- `spec.md` -- feature specification
+- `plan.md` -- implementation plan
+- `data-model.md` -- entity definitions
+- `contracts/` -- interface contracts
+- `tasks.md` -- task breakdown
+- `memory/constitution.md` -- project principles
+
+Cross-reference artifacts against each other during assessment.
+
 ### Step 2: Initial Assessment
 
 After reading the plan, produce a brief assessment (do NOT show this to the user yet -- use it to guide your questioning):
@@ -186,6 +209,13 @@ After reading the plan, produce a brief assessment (do NOT show this to the user
 - What decisions have already been made?
 - What is explicitly stated vs. implied?
 - What obvious gaps exist? (missing stakeholders, undefined success criteria, unaddressed risks, vague scope, etc.)
+
+**If reviewing spec-kit artifacts, also assess:**
+- Cross-artifact consistency: Do the spec, plan, data model, and contracts agree with each other?
+- Constitution compliance: Does the plan violate any stated principles?
+- Completeness: Are any `[NEEDS CLARIFICATION]` markers unresolved?
+- Coverage: Does every user scenario in the spec trace to tasks? Do all entities in the data model appear in contracts?
+- Acceptance criteria: Does every user story have Given/When/Then criteria?
 
 ### Step 3: Steelman and Frame (Rapoport's Rules)
 
@@ -211,6 +241,12 @@ Prioritize gaps in this order:
 5. **Unaddressed risks** -- "What is the biggest thing that could go wrong here?"
 6. **Missing constraints** -- "What are the hard limits on time, budget, or resources?"
 
+**Additional probes for spec-kit artifacts:**
+7. **Cross-artifact contradictions** -- "The spec says X, but the data model implies Y. Which is correct?"
+8. **Constitution violations** -- "The plan uses approach X, but your constitution states principle Y. Is this a justified exception?"
+9. **Missing traceability** -- "This user story has no corresponding tasks. Is it deferred or was it overlooked?"
+10. **Underspecified contracts** -- "This API endpoint has no error responses defined. What happens on failure?"
+
 ### Step 5: Produce Refined Output
 
 Once all gaps are addressed:
@@ -219,6 +255,73 @@ Once all gaps are addressed:
 3. List any items that were explicitly parked or deferred.
 4. Offer to generate an updated version of the plan incorporating all decisions.
 5. Ask the user to confirm or amend each section.
+
+---
+
+## Function: speckit
+
+For software projects only. When the user says "generate a spec", "write a spec", "speckit", or asks you to produce spec-kit-compatible output after an interview. This function transforms interview decisions into structured artifacts following the spec-kit spec-driven development standard.
+
+**Prerequisite:** A completed interview (via `start` or `review`) or enough context from the current conversation to populate all required fields. If context is insufficient, run the missing interview phases first.
+
+### Step 1: Verify Readiness
+
+Confirm that interview decisions cover these areas (if any are missing, ask before proceeding):
+- Vision and scope (Phase 0)
+- User scenarios and motivation (Phase 1)
+- Constraints, data model, entities, interfaces, and acceptance criteria (Phase 2)
+- Risks and assumptions (Phase 3)
+- User confirmation of synthesis (Phase 4)
+
+### Step 2: Generate Constitution
+
+If `memory/constitution.md` does not already exist:
+1. Extract the non-negotiable principles identified in Phase 2.
+2. Write `memory/constitution.md` following the template in `references/speckit.md`.
+3. Ask the user to confirm the principles before proceeding.
+
+If it already exists, run a constitution compliance check against interview decisions.
+
+### Step 3: Generate Spec
+
+Create `specs/[###-feature-name]/spec.md` following the template in `references/speckit.md`:
+1. Map each Jobs-to-be-Done outcome from Phase 1 to a user scenario with Given/When/Then acceptance criteria.
+2. Convert Phase 2 constraints into functional requirements.
+3. List key entities from the data model probing in Phase 2.
+4. Populate success criteria from Phase 2's "What does done look like?"
+5. Populate out-of-scope from Phase 2's explicit exclusions.
+6. Mark any unresolved parked items as `[NEEDS CLARIFICATION]` (maximum 3).
+
+### Step 4: Generate Supporting Artifacts
+
+Create the remaining artifacts in the spec directory:
+1. **`data-model.md`** -- Entities, fields, relationships, state transitions, and validation rules from Phase 2 design probing.
+2. **`contracts/`** -- API surfaces, event formats, or CLI schemas from Phase 2 interface probing. One file per interface.
+3. **`tasks.md`** -- Dependency-ordered task breakdown with phase grouping, parallelization markers, and user story traceability. Format: `- [ ] [T###] [P] [US#] Description \`path/to/file\``.
+4. **`checklists/requirements.md`** -- Validation checklist derived from acceptance criteria.
+
+For template structures, consult `references/speckit.md`.
+
+### Step 5: Cross-Validate
+
+Before presenting output to the user, verify:
+- Every user scenario in spec.md has at least one task in tasks.md.
+- Every entity in data-model.md appears in at least one contract.
+- No `[NEEDS CLARIFICATION]` count exceeds 3 per artifact.
+- Constitution compliance check passes (no unresolved FAIL status).
+- All acceptance criteria are testable (no vague language like "should be fast").
+
+Flag any failures to the user and resolve before finalizing.
+
+### Step 6: Present and Confirm
+
+Show the user:
+1. The full artifact tree with file paths.
+2. A summary of what each artifact contains.
+3. Any `[NEEDS CLARIFICATION]` items that require resolution before implementation.
+4. Ask the user to confirm or amend each artifact.
+
+After confirmation, write the files.
 
 ---
 
