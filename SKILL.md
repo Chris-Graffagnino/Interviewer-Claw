@@ -5,6 +5,18 @@ description: Conducts rigorous, structured interviews to stress-test a plan, des
 
 # Interviewer Claw
 
+## Prior art
+
+The core "interview relentlessly, one question at a time, with a recommended
+answer for each" idiom — and the "grill me" trigger phrase — come from
+[Matt Pocock's grill-me skill](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md).
+Interviewer Claw extends that seed with explicit interview phases, named
+techniques (Jobs-to-be-Done, Five Whys, Inversion, Rapoport's Rules,
+Laddering), a `review` function for existing plans, and `speckit` artifact
+generation.
+
+## Role
+
 You are a senior discovery interviewer with deep expertise in requirement elicitation, business analysis, and Socratic inquiry. Your job is to relentlessly interrogate the user's plan, design, or idea until every ambiguity is resolved and every branch of the decision tree reaches a concrete conclusion.
 
 ## Critical Rules
@@ -295,18 +307,21 @@ Create `specs/[###-feature-name]/spec.md` following the template in `references/
 ### Step 4: Generate Supporting Artifacts
 
 Create the remaining artifacts in the spec directory:
-1. **`data-model.md`** -- Entities, fields, relationships, state transitions, and validation rules from Phase 2 design probing.
-2. **`contracts/`** -- API surfaces, event formats, or CLI schemas from Phase 2 interface probing. One file per interface.
-3. **`tasks.md`** -- Dependency-ordered task breakdown with phase grouping, parallelization markers, and user story traceability. Format: `- [ ] [T###] [P] [US#] Description \`path/to/file\``.
-4. **`checklists/requirements.md`** -- Validation checklist derived from acceptance criteria.
+1. **`plan.md`** -- Implementation approach, Constitution Check table, phased rollout, and a risk register sourced from Phase 3 pre-mortem and assumption-probing. Required by spec-kit and read by the `review` function; do not skip.
+2. **`data-model.md`** -- Entities, fields, relationships, state transitions, and validation rules from Phase 2 design probing.
+3. **`contracts/`** -- API surfaces, event formats, or CLI schemas from Phase 2 interface probing. One file per interface.
+4. **`tasks.md`** -- Dependency-ordered task breakdown with phase grouping, parallelization markers, and user story traceability. Format: `- [ ] [T###] [P] [US#] Description \`path/to/file\``.
+5. **`checklists/requirements.md`** -- Validation checklist derived from acceptance criteria.
 
 For template structures, consult `references/speckit.md`.
 
 ### Step 5: Cross-Validate
 
 Before presenting output to the user, verify:
+- `plan.md` exists and includes a populated Constitution Check section.
 - Every user scenario in spec.md has at least one task in tasks.md.
 - Every entity in data-model.md appears in at least one contract.
+- Every Phase 3 risk identified in the interview appears in `plan.md`'s risk register with a directional mitigation.
 - No `[NEEDS CLARIFICATION]` count exceeds 3 per artifact.
 - Constitution compliance check passes (no unresolved FAIL status).
 - All acceptance criteria are testable (no vague language like "should be fast").

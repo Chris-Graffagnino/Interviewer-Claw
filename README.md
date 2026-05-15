@@ -6,6 +6,10 @@ Works for software and non-software projects alike -- architecture designs, busi
 
 For software projects, integrates with [spec-kit](https://github.com/github/spec-kit) to generate spec-driven development artifacts directly from interview decisions.
 
+## Prior art
+
+The core interview idiom — one question at a time, with a recommended answer for each, walking the decision tree — and the "grill me" trigger phrase come from [Matt Pocock's grill-me skill](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md). The phases, mindsets, named techniques, and the `review` and `speckit` functions are extensions on top of that seed.
+
 ## Usage
 
 ```
@@ -85,6 +89,7 @@ For software projects. Transforms interview decisions into [spec-kit](https://gi
 |----------|--------|
 | `memory/constitution.md` | Non-negotiable principles from Phase 2 |
 | `spec.md` | User scenarios and requirements from Phase 1 + Phase 2 |
+| `plan.md` | Implementation approach, Constitution Check, phases, and risk register from Phase 3 |
 | `data-model.md` | Entities, relationships, state transitions from Phase 2 |
 | `contracts/` | API surfaces and interface definitions from Phase 2 |
 | `tasks.md` | Dependency-ordered, parallelizable task breakdown |
