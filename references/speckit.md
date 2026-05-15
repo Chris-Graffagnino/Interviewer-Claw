@@ -113,6 +113,43 @@ v1.0.0 -- [Date] -- Initial constitution
 - [Field] cannot [constraint]
 ```
 
+## plan.md Template
+
+```markdown
+# Implementation Plan
+
+## Approach
+[One-paragraph summary of the technical strategy: language/runtime choices, major libraries or services, deployment target, and the shape of the solution at a high level.]
+
+## Constitution Check
+| Principle | Status | Notes |
+|-----------|--------|-------|
+| [Name]    | PASS   |       |
+| [Name]    | JUSTIFY| [Rationale for deviation] |
+| [Name]    | FAIL   | [Must resolve before proceeding] |
+
+No FAIL status may proceed to implementation.
+
+## Phases
+### Phase 1: [Name]
+[Goal, scope, and exit criteria for this phase.]
+
+### Phase 2: [Name]
+...
+
+## Risks and Mitigations
+| Risk | Likelihood | Impact | Mitigation |
+|------|------------|--------|------------|
+| [From Phase 3 pre-mortem]      | High/Med/Low | High/Med/Low | [Directional mitigation] |
+
+## Cross-References
+- Spec: `spec.md`
+- Data model: `data-model.md`
+- Contracts: `contracts/`
+- Tasks: `tasks.md`
+- Constitution: `memory/constitution.md`
+```
+
 ## tasks.md Template
 
 ```markdown

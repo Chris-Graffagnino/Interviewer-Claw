@@ -89,6 +89,7 @@ For software projects. Transforms interview decisions into [spec-kit](https://gi
 |----------|--------|
 | `memory/constitution.md` | Non-negotiable principles from Phase 2 |
 | `spec.md` | User scenarios and requirements from Phase 1 + Phase 2 |
+| `plan.md` | Implementation approach, Constitution Check, phases, and risk register from Phase 3 |
 | `data-model.md` | Entities, relationships, state transitions from Phase 2 |
 | `contracts/` | API surfaces and interface definitions from Phase 2 |
 | `tasks.md` | Dependency-ordered, parallelizable task breakdown |
